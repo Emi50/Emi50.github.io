@@ -40,6 +40,10 @@
 <body>
   <div class="container">
     <div class="input-field">
+      <label for="correo">Correo Electrónico:</label>
+      <input type="email" id="correo" required>
+    </div>
+    <div class="input-field">
       <label for="password">Nueva Contraseña:</label>
       <input type="password" id="password" minlength="8" maxlength="12" pattern="[a-zA-Z0-9]+" required>
     </div>
@@ -52,13 +56,14 @@
 
   <script>
     function submitForm() {
+      var correo = document.getElementById('correo').value;
       var password = document.getElementById('password').value;
       var confirmPassword = document.getElementById('confirm-password').value;
       
       if (password === confirmPassword) {
-        // Enviar la nueva contraseña al backend
+        // Enviar la nueva contraseña y el correo al backend
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/usuarios/recuperar-contrasena', true);
+        xhr.open('POST', 'https://proyectoresesime.onrender.com/Usuario', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onreadystatechange = function() {
           if (xhr.readyState === 4 && xhr.status === 200) {
@@ -67,7 +72,7 @@
             alert('Error al actualizar la contraseña. Por favor, inténtalo de nuevo.');
           }
         };
-        xhr.send(JSON.stringify({ nuevaContrasena: password }));
+        xhr.send(JSON.stringify({ correo: correo, nuevaContrasena: password }));
       } else {
         alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
       }
@@ -75,4 +80,3 @@
   </script>
 </body>
 </html>
-
