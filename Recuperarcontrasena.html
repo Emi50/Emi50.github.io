@@ -40,10 +40,6 @@
 <body>
   <div class="container">
     <div class="input-field">
-      <label for="correo">Correo Electrónico:</label>
-      <input type="email" id="correo" required>
-    </div>
-    <div class="input-field">
       <label for="password">Nueva Contraseña:</label>
       <input type="password" id="password" minlength="8" maxlength="12" pattern="[a-zA-Z0-9]+" required>
     </div>
@@ -56,23 +52,29 @@
 
   <script>
     function submitForm() {
-      var correo = document.getElementById('correo').value;
       var password = document.getElementById('password').value;
       var confirmPassword = document.getElementById('confirm-password').value;
       
       if (password === confirmPassword) {
-        // Enviar la nueva contraseña y el correo al backend
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://proyectoresesime.onrender.com/Usuario', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
+        // Enviar la nueva contraseña al backend
+        fetch('https://proyectoresesime.onrender.com/Usuario', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ correo: 'fer@ipn.mx', nuevaContrasena: password })
+        })
+        .then(response => {
+          if (response.ok) {
             alert('Contraseña actualizada correctamente.');
           } else {
             alert('Error al actualizar la contraseña. Por favor, inténtalo de nuevo.');
           }
-        };
-        xhr.send(JSON.stringify({ correo: correo, nuevaContrasena: password }));
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Error al actualizar la contraseña. Por favor, inténtalo de nuevo.');
+        });
       } else {
         alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
       }
@@ -80,3 +82,4 @@
   </script>
 </body>
 </html>
+
